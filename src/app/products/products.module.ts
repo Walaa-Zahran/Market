@@ -11,7 +11,9 @@ import { ProductsDetailsComponent } from './components/products-details/products
     ProductsDetailsComponent
   ],
   imports: [
-    CommonModule
-  ]
+    CommonModule,
+
+  ],
+  providers: []
 })
 export class ProductsModule { }
