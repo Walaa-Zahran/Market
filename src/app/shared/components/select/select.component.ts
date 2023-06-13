@@ -1,5 +1,4 @@
-import { Component, Input } from '@angular/core';
-import { AllProductsComponent } from 'src/app/products/components/all-products/all-products.component';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-select',
@@ -7,16 +6,10 @@ import { AllProductsComponent } from 'src/app/products/components/all-products/a
   styleUrls: ['./select.component.scss']
 })
 export class SelectComponent {
-  title: any = 'Categories :';
-  constructor(private allProducts: AllProductsComponent) { }
-  filterCategory(event: any) {
-    let value = event.target.value;
-    if (value == 'All') {
-      this.allProducts.getProducts();
-    }
-    else {
-      this.allProducts.getProductsByCategory(value);
-    }
-    console.log(value);
+  @Input() title: string = "";
+  @Input() data: any[] = [];
+  @Output() selectedValue = new EventEmitter();
+  detectChanges(event: any) {
+    this.selectedValue.emit(event);
   }
 }

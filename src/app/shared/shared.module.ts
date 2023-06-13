@@ -19,7 +19,7 @@ import { SelectComponent } from './components/select/select.component'
     CommonModule,
     RouterModule,
     HttpClientModule,
-
+    BrowserModule
   ],
   exports: [
     HeaderComponent,

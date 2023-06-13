@@ -9,7 +9,7 @@ import { ProductsService } from '../../services/products/products.service';
 export class AllProductsComponent implements OnInit {
 
   products: any[] = [];
-  @Output() categories: any[] = [];
+  categories: any[] = [];
   loading: boolean = false;
   constructor(private service: ProductsService) { }
   ngOnInit(): void {
@@ -20,10 +20,10 @@ export class AllProductsComponent implements OnInit {
     //we use subscribe as a pipe to  connect data from backend to frontend
     this.loading = true;
     this.service.getAllProducts().subscribe((res: any) => {
-      this.products = res; this.loading = false;
-
+      this.products = res;
+      this.loading = false;
       console.log('products', this.products);
-    }), (error: any) => { alert('Error' + error) }
+    })
 
 
   }
@@ -31,19 +31,32 @@ export class AllProductsComponent implements OnInit {
     //we use subscribe as a pipe to  connect data from backend to frontend
     this.loading = true;
     this.service.getAllCategories().subscribe((res: any) => {
-      this.categories = res; this.loading = false;
+      this.categories = res;
+      this.loading = false;
 
-      console.log('categories', this.categories);
-    }), (error: any) => { alert('Error' + error) }
+      console.log('categories', res);
+    })
 
 
   }
 
-  getProductsByCategory(keyword: string) {
+
+  filterCategory(event: any) {
+    let value = event.target.value;
+
+    if (value == 'All') {
+      this.getProducts();
+    }
+    else {
+      this.getProductsCategory(value);
+    }
+    console.log(value);
+  }
+  getProductsCategory(keyword: string) {
     this.loading = true;
     this.service.getProductsByCategory(keyword).subscribe((res: any) => {
-      this.products = res;
       this.loading = false;
-    }), (error: any) => { alert('Error' + error) }
+      this.products = res;
+    })
   }
 }
