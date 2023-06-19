@@ -6,17 +6,22 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CartsComponent } from './carts/components/carts/carts.component';
 import { ProductsModule } from './products/products.module';
+import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { CartsModule } from './carts/carts.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CartsComponent
+
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     SharedModule,
-    ProductsModule
+    FormsModule,
+    ProductsModule,
+    CartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

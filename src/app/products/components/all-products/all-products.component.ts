@@ -1,5 +1,6 @@
 import { Component, OnInit, Output } from '@angular/core';
 import { ProductsService } from '../../services/products/products.service';
+import { Product } from '../../models/product';
 
 @Component({
   selector: 'app-all-products',
@@ -8,9 +9,10 @@ import { ProductsService } from '../../services/products/products.service';
 })
 export class AllProductsComponent implements OnInit {
 
-  products: any[] = [];
-  @Output() categories: any[] = [];
+  products: Product[] = [];
+  categories: any[] = [];
   loading: boolean = false;
+  cartProducts: any[] = [];
   constructor(private service: ProductsService) { }
   ngOnInit(): void {
     this.getProducts();
@@ -20,10 +22,10 @@ export class AllProductsComponent implements OnInit {
     //we use subscribe as a pipe to  connect data from backend to frontend
     this.loading = true;
     this.service.getAllProducts().subscribe((res: any) => {
-      this.products = res; this.loading = false;
-
+      this.products = res;
+      this.loading = false;
       console.log('products', this.products);
-    }), (error: any) => { alert('Error' + error) }
+    })
 
 
   }
@@ -31,19 +33,50 @@ export class AllProductsComponent implements OnInit {
     //we use subscribe as a pipe to  connect data from backend to frontend
     this.loading = true;
     this.service.getAllCategories().subscribe((res: any) => {
-      this.categories = res; this.loading = false;
+      this.categories = res;
+      this.loading = false;
 
-      console.log('categories', this.categories);
-    }), (error: any) => { alert('Error' + error) }
+      console.log('categories', res);
+    })
 
 
   }
 
-  getProductsByCategory(keyword: string) {
+
+  filterCategory(event: any) {
+    let value = event.target.value;
+
+    if (value == 'All') {
+      this.getProducts();
+    }
+    else {
+      this.getProductsCategory(value);
+    }
+    console.log(value);
+  }
+  getProductsCategory(keyword: string) {
     this.loading = true;
     this.service.getProductsByCategory(keyword).subscribe((res: any) => {
-      this.products = res;
       this.loading = false;
-    }), (error: any) => { alert('Error' + error) }
+      this.products = res;
+    })
+  }
+  addToCart(event: any) {
+    if ("cart" in localStorage) {
+      this.cartProducts = JSON.parse(localStorage.getItem('cart')!);
+      let exist = this.cartProducts.find(item => item.item.id == event.item.id);
+      if (exist) {
+        alert('Product is already in your cart!');
+      }
+      else {
+        this.cartProducts.push(event);
+        localStorage.setItem('cart', JSON.stringify(this.cartProducts));
+      }
+
+    }
+    else {
+      this.cartProducts.push(event);
+      localStorage.setItem('cart', JSON.stringify(this.cartProducts));
+    }
   }
 }
